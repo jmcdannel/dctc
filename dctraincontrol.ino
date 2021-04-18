@@ -2,6 +2,7 @@
 #include "Cab.h"
 #include "Turnout.h"
 #include "Track.h"
+#include "Effect.h"
 #include <Adafruit_PWMServoDriver.h>
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
@@ -63,6 +64,18 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define TRACK_4_LED_PIN 44
 #define TRACK_4_BUTTON_PIN 45
 
+// Effect: Station Lighting
+#define STATION_LIGHTS_PIN 46
+#define STATION_LIGHTS_BUTTON_PIN 47
+
+// Effect: Tunnel Lights
+#define TUNNEL_LIGHTS_PIN 48
+#define TUNNEL_LIGHTS_BUTTON_PIN 49
+
+// Effect: Station Sounds
+#define STATION_SOUNDS_PIN 50
+#define STATION_SOUNDS_BUTTON__PIN 51
+
 Cab cab1 = Cab(CAB_1_TROTTLE_PIN, CAB_1_BUTTON_PIN, CAB_1_POWER_PIN, CAB_1_BRAKE_PIN, CAB_1_SPEED_PIN, CAB_1_FWD_PIN, CAB_1_REV_PIN);
 Cab cab2 = Cab(CAB_2_TROTTLE_PIN, CAB_2_BUTTON_PIN, CAB_2_POWER_PIN, CAB_2_BRAKE_PIN, CAB_2_SPEED_PIN, CAB_2_FWD_PIN, CAB_2_REV_PIN);
 
@@ -74,27 +87,45 @@ Track track2 = Track(TRACK_2_BUTTON_PIN, TRACK_2_RELAY_PIN, TRACK_2_LED_PIN);
 Track track3 = Track(TRACK_3_BUTTON_PIN, TRACK_3_RELAY_PIN, TRACK_3_LED_PIN);
 Track track4 = Track(TRACK_4_BUTTON_PIN, TRACK_4_RELAY_PIN, TRACK_4_LED_PIN);
 
+Effect stationLights = Effect(STATION_LIGHTS_BUTTON_PIN, STATION_LIGHTS_PIN);
+Effect tunnelLights = Effect(TUNNEL_LIGHTS_BUTTON_PIN, TUNNEL_LIGHTS_PIN);
+Effect stationSounds = Effect(STATION_SOUNDS_BUTTON__PIN, STATION_SOUNDS_PIN);
+
 void setup() {
   Serial.begin(9600);
+  
   pwm.begin();
   pwm.setPWMFreq(FREQUENCY);
+  
   cab1.setup();
   cab2.setup();
+  
   turnout1.setup(pwm);
   turnout2.setup(pwm);
+  
   track1.setup();
   track2.setup();
   track3.setup();
   track4.setup();
+  
+  stationLights.setup();
+  tunnelLights.setup();
+  stationSounds.setup();
 }
 
 void loop() {
   cab1.loop();
   cab2.loop();
+  
   turnout1.loop();
   turnout2.loop();
+  
   track1.loop();
   track2.loop();
   track3.loop();
   track4.loop();
+  
+  stationLights.loop();
+  tunnelLights.loop();
+  stationSounds.loop();
 }
